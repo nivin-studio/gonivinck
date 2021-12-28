@@ -18,18 +18,22 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.lis
     git \
     vim 
 
-# 安装protoc
+# 安装 goctl
+USER root
+RUN GOPROXY=https://goproxy.cn/,direct go install github.com/tal-tech/go-zero/tools/goctl@cli
+
+# 安装 protoc
 USER root
 RUN curl -L -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-linux-x86_64.zip && \
     unzip -d /tmp/protoc /tmp/protoc.zip && \
-    mv /tmp/protoc $GOPATH/bin
+    mv /tmp/protoc/bin/protoc $GOPATH/bin
 
-# protoc添加到环境变量中
-ENV PATH /usr/local/protoc/bin:$PATH
+# 安装 protoc-gen-go
+USER root
+RUN go get -u github.com/golang/protobuf/protoc-gen-go@v1.4.0
 
-# 安装 goctl 和 protoc-gen-go
-RUN go get -u github.com/tal-tech/go-zero/tools/goctl && \
-    go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
+# $GOPATH/bin添加到环境变量中
+ENV PATH $GOPATH/bin:$PATH
 
 # 清理垃圾
 USER root
