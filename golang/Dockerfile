@@ -22,7 +22,7 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.lis
 USER root
 RUN curl -L -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-linux-x86_64.zip && \
     unzip -d /tmp/protoc /tmp/protoc.zip && \
-    cp -r /tmp/protoc /usr/local/protoc
+    mv /tmp/protoc $GOPATH/bin
 
 # protoc添加到环境变量中
 ENV PATH /usr/local/protoc/bin:$PATH
