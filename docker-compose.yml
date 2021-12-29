@@ -150,8 +150,8 @@ services:
       - STORE_PASSWORD=${DTM_STORE_PASSWORD}
       - STORE_PORT=${DTM_STORE_PORT}
     ports:
-      - "${DTM_PORT_36789}:36789"
-      - "${DTM_PORT_36790}:36790"
+      - "${DTM_HTTP_PORT}:36789"
+      - "${DTM_GRPC_PORT}:36790"
     networks:
       - backend
     restart: always
