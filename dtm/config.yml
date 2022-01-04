@@ -1,0 +1,53 @@
+#####################################################################
+### dtm can be run without any config.
+### all config in this file is optional. the default value is as specified in each line
+### all configs can be specified from env. for example:
+### Store.MaxOpenConns can also specified from env: STORE_MAX_OPEN_CONNS
+#####################################################################
+
+# Store: # specify which engine to store trans status
+#   Driver: 'boltdb' # default store engine
+
+#   Driver: 'redis'
+#   Host: 'localhost'
+#   User: ''
+#   Password: ''
+#   Port: 6379
+
+# Store:
+#   Driver: 'mysql'
+#   Host: 'mysql'
+#   User: 'root'
+#   Password: '123456'
+#   Port: 3306
+
+#   Driver: 'postgres'
+#   Host: 'localhost'
+#   User: 'postgres'
+#   Password: 'mysecretpassword'
+#   Port: '5432'
+
+### following config is for only Driver postgres/mysql
+#   MaxOpenConns: 500
+#   MaxIdleConns: 500
+#   ConnMaxLifeTime 5 # default value is 5 (minutes)
+#   TransGlobalTable: 'dtm.trans_global'
+#   TransBranchOpTable: 'dtm.trans_branch_op'
+
+### flollowing config is only for some Driver
+#   DataExpire: 604800 # Trans data will expire in 7 days. only for redis/boltdb.
+#   RedisPrefix: '{}' # default value is '{}'. Redis storage prefix. store data to only one slot in cluster
+
+MicroService:
+  Driver: 'dtm-driver-gozero' # name of the driver to handle register/discover
+  Target: 'etcd://etcd:2379/dtmservice' # register dtm server to this url
+  EndPoint: 'dtm:36790'
+
+# the unit of following configurations is second
+
+# TransCronInterval: 3 # the interval to poll unfinished global transaction for every dtm process
+# TimeoutToFail: 35 # timeout for XA, TCC to fail. saga's timeout default to infinite, which can be overwritten in saga options
+# RetryInterval: 10 # the subtrans branch will be retried after this interval
+
+# LogLevel: 'info' # default: info. can be debug|info|warn|error
+

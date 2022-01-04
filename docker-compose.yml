@@ -144,11 +144,12 @@ services:
     build:
       context: ./dtm
     environment:
-      - STORE_DRIVER=${DTM_STORE_DRIVER}
-      - STORE_HOST=${DTM_STORE_HOST}
-      - STORE_USER=${DTM_STORE_USERNAME}
-      - STORE_PASSWORD=${DTM_STORE_PASSWORD}
-      - STORE_PORT=${DTM_STORE_PORT}
+      - TZ=${TZ}
+    entrypoint:
+      - "/app/dtm/dtm"
+      - "-c=/app/dtm/configs/config.yaml"
+    volumes:
+      - ./dtm/config.yml:/app/dtm/configs/config.yaml # 将 dtm 配置文件挂载到容器里
     ports:
       - "${DTM_HTTP_PORT}:36789"
       - "${DTM_GRPC_PORT}:36790"
