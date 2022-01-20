@@ -16,7 +16,8 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.lis
     zip \
     unzip \
     git \
-    vim 
+    vim \
+    screen
 
 # 安装 goctl
 USER root
