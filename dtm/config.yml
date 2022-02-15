@@ -28,7 +28,7 @@
 ### 以下配置仅适用于 postgres/mysql 驱动
 #   MaxOpenConns: 500
 #   MaxIdleConns: 500
-#   ConnMaxLifeTime 5
+#   ConnMaxLifeTime: 5
 #   TransGlobalTable: 'dtm.trans_global'
 #   TransBranchOpTable: 'dtm.trans_branch_op'
 
