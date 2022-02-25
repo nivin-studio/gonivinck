@@ -11,6 +11,7 @@ services:
       context: ./golang                  # 指定构建使用的 Dockerfile 文件
     environment:                         # 设置环境变量
       - TZ=${TZ}
+    privileged: true
     volumes:                             # 设置挂载目录
       - ${CODE_PATH_HOST}:/usr/src/code  # 引用 .env 配置中 CODE_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/src/code 目录
     ports:                               # 设置端口映射
@@ -49,6 +50,7 @@ services:
       - MYSQL_USER=${MYSQL_USERNAME}                  # 设置 Mysql 用户名称
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}              # 设置 Mysql 用户密码
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}    # 设置 Mysql root 用户密码
+    privileged: true
     volumes:
       - ${DATA_PATH_HOST}/mysql:/var/lib/mysql        # 引用 .env 配置中 DATA_PATH_HOST 变量，将宿主机上存放 Mysql 数据的目录挂载到容器中 /var/lib/mysql 目录
     ports:
@@ -62,6 +64,7 @@ services:
       context: ./redis
     environment:
       - TZ=${TZ}
+    privileged: true
     volumes:
       - ${DATA_PATH_HOST}/redis:/data                 # 引用 .env 配置中 DATA_PATH_HOST 变量，将宿主机上存放 Redis 数据的目录挂载到容器中 /data 目录
     ports:
@@ -124,6 +127,7 @@ services:
       context: ./prometheus
     environment:
       - TZ=${TZ}
+    privileged: true
     volumes:
       - ./prometheus/prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml  # 将 prometheus 配置文件挂载到容器里
     ports:
@@ -162,6 +166,7 @@ services:
     entrypoint:
       - "/app/dtm/dtm"
       - "-c=/app/dtm/configs/config.yaml"
+    privileged: true
     volumes:
       - ./dtm/config.yml:/app/dtm/configs/config.yaml # 将 dtm 配置文件挂载到容器里
     ports:
