@@ -2,7 +2,8 @@ version: '3.5'
 # 网络配置
 networks:
   backend:
-    driver: ${NETWORKS_DRIVER}
+    external:
+      name: share_net
 
 # 服务容器配置
 services:

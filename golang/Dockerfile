@@ -1,4 +1,4 @@
-FROM golang:1.17
+FROM golang:1.18
 
 LABEL maintainer="Ving <ving@nivin.cn>"
 
@@ -31,7 +31,11 @@ RUN curl -L -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/relea
 
 # 安装 protoc-gen-go
 USER root
-RUN go get -u github.com/golang/protobuf/protoc-gen-go@v1.4.0
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
+# 安装 protoc-gen-go-grpc
+USER root
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 # $GOPATH/bin添加到环境变量中
 ENV PATH $GOPATH/bin:$PATH
