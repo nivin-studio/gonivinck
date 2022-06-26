@@ -175,3 +175,21 @@ services:
     networks:
       - backend
     restart: always
+
+  rabbitmq:
+    build:
+      context: ./rabbitmq
+    container_name: rabbitMq
+    environment:
+      - TZ=${TZ}
+      - RABBITMQ_DEFAULT_USER=admin                         #rabbitmq 的默认账号
+      - RABBITMQ_DEFAULT_PASS=123456                        #rabbitmq 的默认密码
+    volumes:
+      - ${DATA_PATH_HOST}/rabbitmq/data:/var/lib/rabbitmq   #数据文件挂载
+      - ${DATA_PATH_HOST}/rabbitmq/log:/var/log/rabbitmq    #日志文件挂载
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_MANAGER_PORT}:15672"
+    networks:
+      - backend
+    restart: always
