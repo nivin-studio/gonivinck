@@ -109,18 +109,18 @@ services:
       - backend
     restart: always
 
-  etcd-manage:
-    build:
-      context: ./etcd-manage
-    environment:
-      - TZ=${TZ}
-    ports:
-      - "${ETCD_MANAGE_PORT}:8080"                    # 设置容器8080端口映射指定宿主机端口，用于宿主机访问可视化web
-    depends_on:                                       # 依赖容器
-      - etcd                                          # 在 etcd 服务容器启动后启动
-    networks:
-      - backend
-    restart: always
+  # etcd-manage:
+  #   build:
+  #     context: ./etcd-manage
+  #   environment:
+  #     - TZ=${TZ}
+  #   ports:
+  #     - "${ETCD_MANAGE_PORT}:8080"                    # 设置容器8080端口映射指定宿主机端口，用于宿主机访问可视化web
+  #   depends_on:                                       # 依赖容器
+  #     - etcd                                          # 在 etcd 服务容器启动后启动
+  #   networks:
+  #     - backend
+  #   restart: always
 
   prometheus:
     build:
@@ -158,40 +158,40 @@ services:
       - backend
     restart: always
 
-  dtm:
-    build:
-      context: ./dtm
-    environment:
-      - TZ=${TZ}
-    entrypoint:
-      - "/app/dtm/dtm"
-      - "-c=/app/dtm/configs/config.yaml"
-    privileged: true
-    volumes:
-      - ./dtm/config.yml:/app/dtm/configs/config.yaml # 将 dtm 配置文件挂载到容器里
-    ports:
-      - "${DTM_HTTP_PORT}:36789"
-      - "${DTM_GRPC_PORT}:36790"
-    networks:
-      - backend
-    restart: always
+  # dtm:
+  #   build:
+  #     context: ./dtm
+  #   environment:
+  #     - TZ=${TZ}
+  #   entrypoint:
+  #     - "/app/dtm/dtm"
+  #     - "-c=/app/dtm/configs/config.yaml"
+  #   privileged: true
+  #   volumes:
+  #     - ./dtm/config.yml:/app/dtm/configs/config.yaml # 将 dtm 配置文件挂载到容器里
+  #   ports:
+  #     - "${DTM_HTTP_PORT}:36789"
+  #     - "${DTM_GRPC_PORT}:36790"
+  #   networks:
+  #     - backend
+  #   restart: always
 
-  rabbitmq:
-    build:
-      context: ./rabbitmq
-    container_name: rabbitMq
-    environment:
-      - TZ=${TZ}
-      - RABBITMQ_DEFAULT_USER=admin                         #rabbitmq 的默认账号
-      - RABBITMQ_DEFAULT_PASS=123456                        #rabbitmq 的默认密码
-    volumes:
-      - ${DATA_PATH_HOST}/rabbitmq/data:/var/lib/rabbitmq   #数据文件挂载
-      - ${DATA_PATH_HOST}/rabbitmq/log:/var/log/rabbitmq    #日志文件挂载
-    ports:
-      - "${RABBITMQ_PORT}:5672"
-      - "${RABBITMQ_MANAGER_PORT}:15672"
-    networks:
-      - backend
+  # rabbitmq:
+  #   build:
+  #     context: ./rabbitmq
+  #   container_name: rabbitMq
+  #   environment:
+  #     - TZ=${TZ}
+  #     - RABBITMQ_DEFAULT_USER=admin                         #rabbitmq 的默认账号
+  #     - RABBITMQ_DEFAULT_PASS=123456                        #rabbitmq 的默认密码
+  #   volumes:
+  #     - ${DATA_PATH_HOST}/rabbitmq/data:/var/lib/rabbitmq   #数据文件挂载
+  #     - ${DATA_PATH_HOST}/rabbitmq/log:/var/log/rabbitmq    #日志文件挂载
+  #   ports:
+  #     - "${RABBITMQ_PORT}:5672"
+  #     - "${RABBITMQ_MANAGER_PORT}:15672"
+  #   networks:
+  #     - backend
     # restart: always
 
   zookeeper:
@@ -199,15 +199,19 @@ services:
     ports:
       - '2181:2181'
     environment:
+      - TZ=${TZ}
       - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
       - backend
+    volumes:
+      - ${DATA_PATH_HOST}/zookeeper:/bitnami/zookeeper
   
   kafka:
     image: 'bitnami/kafka:latest'
     ports:
       - '9092:9092'
     environment:
+      - TZ=${TZ}
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
@@ -218,3 +222,16 @@ services:
       - zookeeper
     networks:
       - backend
+    volumes:
+      - ${DATA_PATH_HOST}/kafka:/bitnami/kafka
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+    ports:
+      - 55001:5432
+    networks:
+      - backend
+    volumes:
+      - ${DATA_PATH_HOST}/postgresql:/var/lib/postgresql
