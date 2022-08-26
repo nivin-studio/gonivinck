@@ -235,3 +235,12 @@ services:
       - backend
     volumes:
       - ${DATA_PATH_HOST}/postgresql:/var/lib/postgresql
+
+  nginx:
+    image: nginx
+    ports:
+      - "10000:80"
+    volumes:
+      - ${DATA_PATH_HOST}/nginx:/usr/nginx
+    environment:
+      - TZ=${TZ}
