@@ -49,6 +49,7 @@ RUN apt-get clean && \
 # 设置工作目录
 WORKDIR /usr/src/code
 
+EXPOSE 22
 EXPOSE 8000
 EXPOSE 8001
 EXPOSE 8002
