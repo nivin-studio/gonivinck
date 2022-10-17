@@ -50,9 +50,11 @@ services:
       - MYSQL_USER=${MYSQL_USERNAME}                  # 设置 Mysql 用户名称
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}              # 设置 Mysql 用户密码
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}    # 设置 Mysql root 用户密码
+      - MYSQL_DATABASE=${MYSQL_DATABASE}              # 数据库
     privileged: true
     volumes:
-      - ${DATA_PATH_HOST}/mysql:/var/lib/mysql        # 引用 .env 配置中 DATA_PATH_HOST 变量，将宿主机上存放 Mysql 数据的目录挂载到容器中 /var/lib/mysql 目录
+      - ${DATA_PATH_HOST}/mysql:/var/lib/mysql            # 引用 .env 配置中 DATA_PATH_HOST 变量，将宿主机上存放 Mysql 数据的目录挂载到容器中 /var/lib/mysql 目录
+      - ${MYSQL_TABLE_PATH}:/docker-entrypoint-initdb.d/  # 初始化数据表
     ports:
       - "${MYSQL_PORT}:3306"                          # 设置容器3306端口映射指定宿主机端口
     networks:
